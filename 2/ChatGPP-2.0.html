@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>ChatGPP</title>
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+			box-sizing: border-box;
+		}
+		html, body {
+			height: 100%;
+            background-color:pink;
+		}
+		ul li {
+			list-style: none;
+		}
+		.wrap {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 60%;
+		}
+		.container {
+			padding: 20px;
+			width: 75%;
+			height: 75%;
+			border:100%;
+			overflow: auto;
+		}
+		.bar-group {
+			padding: 20px;
+			text-align: center;
+		}
+		.bar-group input:first-of-type {
+			padding: 5px;
+			width: 300px;
+		}
+		.bar-group input:not(:first-of-type) {
+			padding: 5px 20px;
+		}
+		.text{
+			color: cornflowerblue;
+			font-size: 20px;
+			font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+		}
+	</style>
+</head>
+<body>
+	<span class="text">这是一个人工智能,但每天只有有限次数,它不鸟你了就是gg了</span>
+	<div class="wrap">
+		<div class="container">
+			<ul class="msg"></ul>
+		</div>
+	</div>
+	<hr />
+	<form onsubmit="return false">
+		<p class="bar-group">
+			<input type="text" id="umsg" placeholder="文明用语 从你妈说起"/>
+			<input type="submit" value="发送" onclick="send()" />
+		</p>
+            <p class="bar-group">
+            清除页面的缓存:
+            <input type="reset" value="重置页面" onclick="reset()"/>
+			</p>
+	</form>
+	<script>
+		var container = document.querySelector('.container');
+		var msg = document.querySelector('.msg');
+		var umsg = document.querySelector('#umsg');
+		
+		// 发送数据
+		function send() {
+			if (umsg.value) {	// 非空
+				var uli = document.createElement('li');
+					uli.textContent = '丑逼：' + umsg.value;
+					msg.appendChild(uli);
+				
+				// URL查询参数实例，直接对象格式，省去了很多麻烦
+				var  params = new URLSearchParams({
+					key: '868ffe977d3b445b541e7e28acb51e41',	// 你的密钥
+					question: umsg.value,	// 输入的内容
+				});
+
+				var xhr = new XMLHttpRequest();
+				xhr.open('POST', 'http://api.tianapi.com/txapi/robot/index', true);
+				xhr.responseType = 'json';	// 服务器返回 json
+				xhr.onload = function() {
+					if (xhr.readyState === 4) {
+						if ( (xhr.status >= 200 && xhr.status < 300)
+						|| (xhr.status === 304) ) {
+							var retval = this.response.newslist[0].reply
+								.replace(/\{appellation\}/g, '大佬')	// "你"的名字
+								.replace(/\{robotname\}/g, '小天');	// "机器人"的名字
+							
+							var hli = document.createElement('li');
+								hli.textContent = '帅比：' + retval;
+							msg.appendChild(hli);
+							container.scrollTop = container.scrollHeight; // 滚动条置底
+						}
+					}
+				};
+				// POST 请求需要的头信息
+				xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+				xhr.send(params);	// 直接发送URL查询参数实例
+				umsg.value = '';
+			}
+			umsg.focus();	// 聚焦
+			container.scrollTop = container.scrollHeight; // 滚动条置底
+		}
+		
+		// 清空屏幕
+		function clearTxt() {
+			msg.innerHTML = null;
+			umsg.value = null;
+			umsg.focus();
+		}
+		
+		umsg.focus();	// 聚焦
+	</script>
+</body>
+</html>
