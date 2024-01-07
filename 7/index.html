@@ -1,0 +1,272 @@
+﻿<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta charset="UTF-8">
+<title>捣蛋鬼开导弹</title>
+<style>
+	html,body{
+    height: 100%;
+}
+*{
+    padding: 0;
+    margin: 0;
+}
+body {
+	text-align: center;
+    background-color: wheat;
+    overflow: hidden;
+}
+h1{
+    font-size: 40px;
+    margin-top: 50px;
+    font-family: "幼圆","宋体","微软雅黑";
+}
+span{
+	font-size: 30px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-bottom: none;
+	float: inherit;
+	font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+h3{
+	font-size: 15px;
+    margin-left: 20px;
+    margin-top: none;
+    float: none;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+img,.active{
+    position: absolute;
+    top: 24%;
+    width: 24%;
+    transform: scale(0);
+    -webkit-transform: scale(0);
+    transition: all .4s ease-out;
+    -webkit-transition: all .4s ease-out;
+}
+.active{
+    transform: scale(1);
+    -webkit-transform: scale(1);
+}
+canvas,div{
+    position: absolute;
+    left: 50%;
+    width: 72%;
+    height: 72%;
+    transform: translate(-50%,0%);
+    -webkit-transform: translate(-50%,0%);/*居中*/
+    margin-top: 50px;
+}
+div{
+    z-index: 1;
+}
+#temp{
+    position: fixed;
+    top: 200%;
+    left: 200%;
+    transform: scale(0.1);
+    -webkit-transform: scale(0.1);
+}
+.click{
+	background-color: aliceblue;
+	opacity: 0.7;
+	transition: opacity 500ms;
+	color: red;
+}
+.click:hover{
+	opacity: 1;
+	background-color: aquamarine;
+	color: blueviolet;
+}
+.click:active{
+	background-color: yellowgreen;
+	color:violet
+}
+</style>
+</head>
+<body>
+	<h6 class="box"></h6>
+	<audio id="bgmusic" src="https://github.com/wjshincni/game1/blob/main/resourses/bgmusic.mp3?raw=true" autoplay hidden preload="auto" loop></audio>
+	<audio id="fd" src="resourses/findtsy.mp3" autoplay hidden preload="auto" loop></audio>
+<h3>	
+	<button class="click" onclick="changeHp()" id="myHp">想修改HP吗?开工!</button>
+	<button class="click" onclick="changeSc()" id="mySc">想修改分数吗?开工!</button>
+	<button class="click" onclick="changeDc()" id="myDc">想修改难度吗?开工!</button>
+	<button class="click" onclick="changePg()" id="myPg">想修改程序吗?开工!</button>	
+	<input type="image" onclick="window.open('http://htmlpreview.github.io/?https://github.com/wjshincni/ttx/blob/main/survey.html','_blank')" src="resourses/bgmusic.png">
+</h3>
+<span>SCORE:0</span>
+<span>HP:3</span>
+<span>Made By ttx 在加载前点击页面即可播放音乐</span>
+<div class="diShu">
+</div>
+<canvas></canvas>
+<img id="temp" src="resourses/ds.png">
+</body>
+<script>
+var canvas = document.getElementsByTagName("canvas")[0];
+canvas.width = 1000;
+canvas.height = 1000;
+var cubes = 3;
+var ctx = canvas.getContext("2d");
+ctx.fillStyle = "#d9bf9a";
+var areaSize = 1000/cubes;
+var cubeSize = areaSize*0.96;
+ctx.translate(areaSize*0.02,areaSize*0.02);
+var rats = [];
+var points;
+var hp;
+var interval;
+var t,t2;
+
+window.onload = function(){
+	drawPannel();
+	initGame();
+};
+
+function initGame(){
+	points = 0;
+	hp = 3;
+	interval = 100;
+	document.getElementsByTagName("span")[0].innerHTML = "SCORE:"+points;
+	document.getElementsByTagName("span")[1].innerHTML = "HP:"+hp;
+	document.getElementsByTagName("span")[2].innerHTML = "DIFFICULTY:"+interval;
+	t = setInterval(function(){
+		generateRats();
+		maintanceRats();
+	},interval);
+}
+function drawPannel(){
+	for(var i=0;i<cubes;i++){
+		for(var j=0;j<cubes;j++){
+
+			var img = new Image();
+			img.src = "resourses/ds.png";
+			img.style.left = i*33.33 + "%";
+			img.style.top = j*0.3333*canvas.clientHeight + "px";
+			img.addEventListener("mousedown",clicked);
+			img.addEventListener('touchstart', touched);
+			document.getElementsByTagName("div")[0].appendChild(img);
+			rats.push(img);
+		}
+	}
+}
+function touched(){
+	chosen(this);
+	var touch = event.touches[0];
+	var rect = canvas.getBoundingClientRect();
+	checkArea(touch.pageX - rect.left,touch.pageY - rect.top);
+	fd.play();
+}
+function clicked(){
+	chosen(this);
+	var rect = canvas.getBoundingClientRect();
+	checkArea(event.clientX - rect.left,event.clientY - rect.top);
+	fd.play();
+}
+function chosen(rat){
+	if(rat.className == "active"){
+		rat.classList.remove("active");
+		points ++;
+		document.getElementsByTagName("span")[0].innerHTML = "SCORE:"+points;
+		interval -= interval*0.03>2?interval*0.03:interval*0.015;
+		document.getElementsByTagName("span")[2].innerHTML = "DIFFICULTY:"+interval;
+	}
+}
+function generateRats(){//产生地鼠的方法
+	if(parseInt(Math.random()*100)%parseInt(((interval/12)>2?(interval/12):2))==0){
+		document.getElementsByTagName("span")[2].innerHTML = "DIFFICULTY:"+interval;
+		var ID = Math.ceil(Math.random()*8);
+		if(rats[ID].className == ""){
+			t2 = setTimeout(function(){
+				rats[ID].classList.add("active");
+				rats[ID].id = interval/4;
+			},500);
+		}
+	}
+}
+function maintanceRats(){//维护地鼠的方法
+	var activeRats = document.getElementsByClassName("active");//获取所有出现的地鼠
+	for(var i=0;i<activeRats.length;i++){//用id表示剩余时间
+		activeRats[i].id --;
+		if(activeRats[i].id<0){//如果到时间了
+			activeRats[i].classList.remove("active");//当前地鼠隐藏
+			hp --;//掉血
+			interval *= 1.2;//回退一点游戏难度
+			document.getElementsByTagName("span")[2].innerHTML = "DIFFICULTY:"+interval;
+			document.getElementsByTagName("span")[1].innerHTML = "HP:"+hp;//更新血量显示
+			if(hp == 0){
+				lose();
+				fd.play();
+			}
+		}
+	}
+}
+function lose(){//如果输了
+	clearInterval(t);//停止计时器，等待游戏重新开始
+	clearTimeout(t2);
+	setTimeout(function(){
+
+		alert("死废物在"+interval+"的难度(越小越难)下打了"+points+"个捣蛋鬼。");
+		for(var i=0;i<rats.length;i++){
+			rats[i].classList.remove("active");
+		}
+		setTimeout(function(){
+			initGame();
+		},500);
+	},10);
+}
+function changeHp(){
+    var button = document.getElementById("myHp"); // 获取按钮元素
+    var newHp = prompt("请输入新的HP值", "3"); // 提示用户输入新的数值
+    if (newHp != null && !isNaN(parseInt(newHp))) { // 判断输入是否有效且为数字
+        var numHp = parseInt(newHp); // 将输入的字符串转换为整数类型
+        hp = numHp;
+		document.getElementsByTagName("span")[1].innerHTML = "HP:"+hp;
+    } else{
+        alert("无效的输入!不想要命直说!");
+		hp= "cnm";
+    }
+}
+function changeDc(){
+	var button = document.getElementById("myDc"); // 获取按钮元素
+    var newDc = prompt("请输入新的难度", "100"); // 提示用户输入新的数值
+    if (newDc != null && !isNaN(parseInt(newDc))) { // 判断输入是否有效且为数字
+        var numDc = parseInt(newDc); // 将输入的字符串转换为整数类型
+        interval = numDc;
+		document.getElementsByTagName("span")[2].innerHTML = "DIFFICULTY:"+interval;
+    } else{
+        alert("无效的输入!不想要简单点直说!");
+		interval = "cnm";
+    }
+}
+function changeSc(){
+	var button = document.getElementById("mySc"); // 获取按钮元素
+    var newSc = prompt("请输入新的分数", "0"); // 提示用户输入新的数值
+    if (newSc != null && !isNaN(parseInt(newSc))) { // 判断输入是否有效且为数字
+        var numSc = parseInt(newSc); // 将输入的字符串转换为整数类型
+        points = numSc;
+		document.getElementsByTagName("span")[0].innerHTML = "SCORE:"+points;
+    } else{
+        alert("无效的输入!不想要开挂直说!");
+		points = "cnm";
+	}
+}
+function changePg(){
+	var button = document.getElementById("myDc"); // 获取按钮元素
+    var newPg = prompt("请输入新的程序", "Put Your Codes Here,Please."); // 提示用户输入新的数值
+    if (newPg != null && !isNaN(parseInt(newPg))) { // 判断输入是否有效且为数字
+        alert("你傻逼吗")
+    } else{
+        alert("你傻逼吗");
+    }
+}
+function hpp(){
+	hp+=1;
+	document.getElementsByTagName("span")[1].innerHTML = "HP:"+hp;
+}
+</script>
+
+</html>
