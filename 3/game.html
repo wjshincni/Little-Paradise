@@ -1,0 +1,39 @@
+<html>
+   <head>
+      <title> start menu</title>
+      
+      <style>
+      #StartScreen,#GameCanvas{
+		height: 200px;
+		width: 400px;
+		background: lightcoral;
+		position: fixed;
+		border-radius: 30%;
+		top: 50%;
+		left: 50%;
+		margin-top: -100px;
+		margin-left: -200px;
+		text-align:center;
+	  }
+	  
+  
+	  #StartButton:hover {
+		  cursor:pointer;
+		  background:lightblue;
+	  }	      
+	  
+	  #QuitButton:hover {
+		  cursor:pointer;
+		  background:lightblue;
+	  }		        
+      </style>
+   </head>
+ 
+<body>
+	<div id="StartScreen">
+		<h1>开始游戏吗?</h1>
+		<input id="StartButton" type="button" value="开始" onclick="window.open('scripts/game.html','_blank')"> <br> <br>
+		<input id="QuitButton" type="button" value="退出" onclick="alert('好的,请你关掉这个界面,然后打开game.html')"/>
+	</div>
+</script>
+</body>

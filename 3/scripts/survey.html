@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一个小调查</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing:content-box;
+    }
+    html, body {
+        height: 100%;
+                    background-color:lightgreen;
+    }
+    ul li {
+        list-style: none;
+    }
+    .wrap {
+        display: flex;
+        justify-content: start;
+        align-items:self-start;
+        height: 50%;
+        width: 50%;
+    }
+    .container {
+        padding: 20px;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        margin: auto;
+    }
+    .bar-group {
+        padding: 20px;
+        text-align: start;
+        height: 50%;
+        width: 50%;
+    }
+    .bar-group input:first-of-type {
+        padding: 5px;
+        width: 300px;
+    }
+    .bar-group input:not(:first-of-type) {
+        padding: 5px 20px;
+    }
+</style>
+<body>
+    <div class="wrap">
+		<div class="container">
+			<ul class="msg"></ul>
+		</div>
+	</div>
+	<hr />
+	<form onsubmit="return false">
+		<p class="bar-group">
+			<input type="text" id="umsg" placeholder="你都玩到100分了,是不是该评价一下这个游戏?"/>
+			<input type="submit" value="提交" onclick=send() />
+		</p>
+    <form onsubmit="return false">
+
+</body>
+<script>
+    var container = document.querySelector('.container');
+    var msg = document.querySelector('.msg');
+    var umsg = document.querySelector('#umsg');
+    function send() {
+        if (umsg.value) {
+            var uli = document.createElement('li');
+                uli.textContent = '你可以点击提交旁的返回按钮,然后继续游戏了';
+                msg.appendChild(uli);
+            var  params = new URLSearchParams({
+                key: '868ffe977d3b445b541e7e28acb51e41',
+                question: umsg.value,
+            });
+    
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://api.tianapi.com/txapi/saylove/index', true);
+            xhr.responseType = 'json';
+            xhr.onload = function() {
+                if (xhr.readyState === 4) {
+                    if ( (xhr.status >= 200 && xhr.status < 300)
+                    || (xhr.status === 304) ) {
+                        var retval = this.response.newslist[0].reply
+                            .replace(/\{appellation\}/g, '大佬')
+                            .replace(/\{robotname\}/g, '小天');
+                        
+                        var hli = document.createElement('li');
+                            hli.textContent = '云端>>>' + retval;
+                        msg.appendChild(hli);
+                        container.scrollTop = container.scrollHeight;
+                    }
+                }
+            };
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send(params);
+            umsg.value = '';
+        }
+        umsg.focus();
+        container.scrollTop = container.scrollHeight; 
+    }
+    function clearTxt() {
+        msg.innerHTML = null;
+        umsg.value = null;
+        umsg.focus();
+    }
+    umsg.focus();
+    </script>
+</html>
