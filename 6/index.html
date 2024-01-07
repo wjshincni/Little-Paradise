@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Surprise</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        html,body{
+            height: 100%;
+            background-color: red;
+        }
+        span{
+            font-size: 30px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif,'微软雅黑';
+            color: red;
+        }
+        img{
+            max-width: 100%;
+            min-width: none;
+            max-height: max-content;
+            float: left;
+            margin: none;
+            z-index: 1;
+        }
+        .begin{
+            background-color: burlywood;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: 2;
+        }
+        .button{
+            background-color: aquamarine;
+            color: blue;
+            width: 100px;
+            height: 50px;
+            transition: ease-out 1s;
+        }
+        .button:hover{
+            background-color: red;
+            color: white;
+            transition:ease-in 500ms;
+        }
+        .imgs{
+            opacity: 0;
+            transition: opacity 1s;
+        }
+        .imgs:hover{
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="begin" id="begin">
+        <div>
+            <span>点击按钮后,手机版请到处点点,电脑版请倒处划划<span>
+            <button class="button" onclick="document.getElementById('begin').style.display='none'">点我</button>
+        </div>
+    </div>
+    <img class="imgs" src="res/1.png">
+    <img class="imgs" src="res/2.png">
+    <img class="imgs" src="res/3.png">
+    <img class="imgs" src="res/4.png">
+    <img class="imgs" src="res/5.png">
+    <img class="imgs" src="res/6.png">
+    <img class="imgs" src="res/7.png">
+    <img class="imgs" src="res/8.png">
+    <audio src="res/m.mp3" loop autoplay preload="auto" hidden></audio>
+</body>
+</html>
