@@ -1,4 +1,11 @@
 /*css*/
+.exp{
+	color: rgb(240, 165, 165);
+	font-size: 20px;
+	z-index:9;
+	margin-left: 45%;
+    margin-top: auto;
+}
 a {
 	position: relative;
 	display: inline-block;
@@ -62,7 +69,6 @@ div{
 	transform: perspective(800px);
 	transition-property: scroll;
 	transition-timing-function: ease;
-
 }
 html,body{
     height: 100%;

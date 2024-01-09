@@ -1,4 +1,59 @@
 //js
+function lpg1(){
+  setTimeout (function(){
+    loadPage1();
+  },250);
+}
+function lpg2(){
+  setTimeout (function(){
+    loadPage2();
+  },250);
+}
+function lpg3(){
+  setTimeout (function(){
+    loadPage3();
+  },250);
+}
+function lpg4(){
+  setTimeout (function(){
+    loadPage4();
+  },250);
+}
+function lpg5(){
+  setTimeout (function(){
+    loadPage5();
+  },250);
+}
+function lpg6(){
+  setTimeout (function(){
+    loadPage6();
+  },250);
+}
+function lpg7(){
+  setTimeout (function(){
+    loadPage7();
+  },250);
+}
+function lpg8(){
+  setTimeout (function(){
+    loadPage8();
+  },250);
+}
+function lpg9(){
+  setTimeout (function(){
+    loadPage9();
+  },250);
+}
+function lpg10(){
+  setTimeout (function(){
+    loadPage10();
+  },250);
+}
+function lpg11(){
+  setTimeout (function(){
+    loadPage11();
+  },250);
+}
 function loadPage1() {
     // 获取当前页面元素
     var currentPage = document.getElementById("startPage");
@@ -23,7 +78,7 @@ function loadPage2() {
     setTimeout(function(){
       // 添加显示类名
       targetPage.classList.add("show");
-    }, 2000); // 此处的ms可根据需求调整
+    }, 1000); // 此处的ms可根据需求调整
 }
 function loadPage3() {
     // 获取当前页面元素
@@ -36,7 +91,7 @@ function loadPage3() {
       // 获取目标页面元素
       // 添加显示类名
       targetPage.classList.add("show");
-    }, 2000); // 此处的500ms可根据需求调整
+    }, 1000); // 此处的500ms可根据需求调整
 }
 function loadPage4() {
     // 获取当前页面元素
@@ -49,7 +104,7 @@ function loadPage4() {
       // 获取目标页面元素
       // 添加显示类名
       targetPage.classList.add("show");
-    }, 2000); // 此处的500ms可根据需求调整
+    }, 1000); // 此处的500ms可根据需求调整
 }
 function loadPage5() {
   // 获取当前页面元素
